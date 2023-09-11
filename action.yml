@@ -10,7 +10,5 @@ outputs:
     description: "The time we greeted you"
 
 runs:
-  using: "docker"
-  image: "Dockerfile"
-  args:
-    - ${{ inputs.who-to-greet }}
+  using: "node20"
+  main: "index.js"
