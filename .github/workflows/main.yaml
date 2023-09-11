@@ -1,19 +1,20 @@
+name: Test Action
+
 on: [push]
 
 jobs:
-  hello_world_job:
+  hello-world-job:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-      # To use this repository's private action,
-      # you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
       - name: Hello world action step
-        uses: ./ # Uses an action in the root directory
+        uses: ./.github/actions/action
         id: hello
         with:
-          who-to-greet: "Mona the Octocat"
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+          who-to-greet: "John"
+
+      - name: Print the greeting's output
+        run: echo "The greeting was ${{ steps.hello.outputs.greeting }}"
