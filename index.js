@@ -9,6 +9,7 @@ try {
   console.log(`Hello ${nameToGreet}!`);
   const time = (new Date()).toTimeString();
 
+  core.setOutput("lable", label);
   core.setOutput("time", time);
 
   const payload = JSON.stringify(github.context.payload, undefined, 2)
