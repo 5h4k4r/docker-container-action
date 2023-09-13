@@ -24,10 +24,8 @@ jobs:
         uses: ./
         id: hello
         with:
-          who-to-greet: "John"
           label: ${{ github.event.label.name }}
 
       - name: Get the output time
         run: |
-          echo "The time was ${{ steps.hello.outputs.time }}"
           echo The label was ${{ steps.hello.outputs.label }}

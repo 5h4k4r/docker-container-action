@@ -3,14 +3,10 @@ const github = require('@actions/github');
 
 
 try {
-  const nameToGreet = core.getInput('who-to-greet');
   const label = core.getInput('label');
   console.log(`Label: ${label}`)
-  console.log(`Hello ${nameToGreet}!`);
-  const time = (new Date()).toTimeString();
 
   core.setOutput("label", label);
-  core.setOutput("time", time);
 
   const payload = JSON.stringify(github.context.payload, undefined, 2)
 
