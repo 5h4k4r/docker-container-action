@@ -5,9 +5,11 @@ inputs:
     description: "Who to greet"
     required: true
     default: "World"
+
   label:
     description: "Optional label"
     required: false
+
 outputs:
   time: # id of output
     description: "The time we greeted you"
