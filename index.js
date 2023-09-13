@@ -4,6 +4,8 @@ const github = require('@actions/github');
 
 try {
   const nameToGreet = core.getInput('who-to-greet');
+  const label = core.getInput('label');
+  console.log(`Lable: ${label}`)
   console.log(`Hello ${nameToGreet}!`);
   const time = (new Date()).toTimeString();
 

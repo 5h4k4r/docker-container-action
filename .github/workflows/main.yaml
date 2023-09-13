@@ -1,6 +1,8 @@
 name: Test Action
 
-on: [push]
+on:
+  pull_request:
+    types: [labeled]
 
 jobs:
   hello-world-job:
@@ -23,6 +25,6 @@ jobs:
         id: hello
         with:
           who-to-greet: "John"
-
+          label: ${{ github.event.label.name }}
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
