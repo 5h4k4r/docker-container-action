@@ -13,7 +13,7 @@ try {
 
   core.setOutput("label", label);
 
-  // if (project == 'dotnetcore')
+  // if (project == 'dotnet')
   //   filePath = `${filePath}/.csproj`;
   // else if (project == 'nodejs')
   //   filePath = `${filePath}/package.json`;
