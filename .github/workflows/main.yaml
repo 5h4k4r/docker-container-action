@@ -21,7 +21,8 @@ jobs:
         run: npm install
 
       - name: Hello world action step
-        uses: ./
+        uses: ./index.ts
+
         id: hello
         with:
           label: ${{ github.event.label.name }}
