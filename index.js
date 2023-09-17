@@ -1,12 +1,13 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 const fs = require('fs')
-const xml2js = require('xml2js')
+import commitChanges from './commit.js';
 
 try {
   console.log(`CWD: ${process.cwd()}`)
   const label = core.getInput('label');
   const filePath = `${process.cwd()}/${core.getInput('filePath')}`;
+
 
   console.log(`Label: ${label}`)
   console.log(`File path: ${filePath}`)
@@ -18,7 +19,8 @@ try {
   // else if (project == 'nodejs')
   //   filePath = `${filePath}/package.json`;
 
-  const version = require(filePath).version;
+  const packageJson = require(filePath);
+  const version = packageJson.version;
 
 
   // the version is in semantic format, so we can split it by dot
@@ -46,7 +48,10 @@ try {
 
   console.log(`Old version: ${version}. New version: ${newVersion}`)
 
+  packageJson.version = newVersion;
 
+  fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
+  commitChanges();
   const payload = JSON.stringify(github.context.payload, undefined, 2)
 
   // console.log(`The event payload: ${payload}`);
