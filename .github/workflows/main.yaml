@@ -21,7 +21,7 @@ jobs:
         run: npm install
 
       - name: Hello world action step
-        uses: ./index.ts
+        uses: ./
 
         id: hello
         with:
