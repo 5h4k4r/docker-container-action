@@ -24,22 +24,6 @@ try {
   // join the parts back together
   const newVersion = `v${versionParts.join('.')}`;
 
-  // Parse XML to JS Obj
-  xml2js.parseString(data, function (err, result) {
-    if (err) {
-      return console.log(err);
-    }
-    // Convert JS obj to JSON
-    const json = JSON.stringify(result, null, 2);
-
-    // Write JSON to file
-    fs.writeFile('./project.json', json, 'utf8', function (err) {
-      if (err) {
-        return console.log(err);
-      }
-      console.log('Created project.json from project.csproj');
-    });
-  });
 
   console.log(`Old version: ${version}. New version: ${newVersion}`)
 
