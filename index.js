@@ -10,7 +10,7 @@ try {
 
   const version = require('./package.json').version;
   // the version is in semantic format, so we can split it by dot
-  const versionParts = version.substring(1).split('.');
+  const versionParts = version.split('.');
   if (label === 'major')
     versionParts[0] = parseInt(versionParts[0]) + 1;
   else if (label == 'minor')
