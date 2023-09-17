@@ -4,6 +4,9 @@ inputs:
   label:
     description: "Optional label"
     required: false
+  filePath:
+    description: "File path of the project info (e.g: package.json) relative to the root directory of the repository."
+    required: true
 
 outputs:
   time: # id of output
