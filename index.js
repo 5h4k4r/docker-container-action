@@ -84,6 +84,7 @@ async function commitChanges(filePath) {
       `https://api.github.com/repos/${owner}/${repo}/branches/${branch}`
     );
 
+    console.log('branchResponse: ' + branchResponse.data)
     const baseTreeSha = branchResponse.data.commit.sha;
 
     // Create a new blob with the updated content
@@ -94,6 +95,7 @@ async function commitChanges(filePath) {
         encoding: 'utf-8',
       }
     );
+    console.log('blobResponse: ' + blobResponse.data)
 
     const newBlobSha = blobResponse.data.sha;
 
@@ -113,6 +115,7 @@ async function commitChanges(filePath) {
       }
     );
 
+    console.log('treeResponse: ' + treeResponse.data)
     const newTreeSha = treeResponse.data.sha;
 
     // Create a new commit
