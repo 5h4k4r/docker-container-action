@@ -2,6 +2,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const fs = require('fs')
 
+run();
 async function run() {
   try {
     console.log(`CWD: ${process.cwd()}`)
@@ -138,3 +139,4 @@ async function commitChanges(filePath) {
     console.error('Error committing changes:', error);
   }
 }
+
