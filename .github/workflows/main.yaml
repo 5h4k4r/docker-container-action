@@ -28,7 +28,7 @@ jobs:
         id: hello
         with:
           label: minor
-          filePath: $PWD/package.json
+          filePath: package.json
 
       # ${{ github.event.label.name }}
       - name: Get the output time
