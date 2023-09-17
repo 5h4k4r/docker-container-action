@@ -1,6 +1,6 @@
-import * as core from '@actions/core'
-import * as github from '@actions/github'
-import * as fs from 'fs';
+const core = require('@actions/core')
+const github = require('@actions/github')
+const fs = require('fs')
 try {
   const label = core.getInput('label');
   console.log(`Label: ${label}`)
@@ -8,7 +8,7 @@ try {
   core.setOutput("label", label);
 
 
-  fs.readFile('/Readme.md', 'utf8', (err, data) => {
+  fs.readFile('/README.md', 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return;
