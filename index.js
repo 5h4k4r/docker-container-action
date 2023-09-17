@@ -8,7 +8,7 @@ try {
   core.setOutput("label", label);
 
 
-  fs.readFile('/README.md', 'utf8', (err, data) => {
+  fs.readFile('./README.md', 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return;
