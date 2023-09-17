@@ -7,17 +7,13 @@ try {
 
   core.setOutput("label", label);
 
+  const version = require('./package.json').version;
 
-  fs.readFile('./README.md', 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(`File data: ${data}`);
-  });
+  console.log(`Version: ${version}`)
+
   const payload = JSON.stringify(github.context.payload, undefined, 2)
 
-  console.log(`The event payload: ${payload}`);
+  // console.log(`The event payload: ${payload}`);
 } catch (error) {
   core.setFailed(error.message);
 }
