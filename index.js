@@ -19,7 +19,7 @@ try {
     versionParts[2] = parseInt(versionParts[2]) + 1;
 
 
-
+  console.log(versionParts)
   // increment the patch version
   // join the parts back together
   const newVersion = `v${versionParts.join('.')}`;
