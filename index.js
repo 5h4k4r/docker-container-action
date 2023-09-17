@@ -1,6 +1,7 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 const fs = require('fs')
+const xml2js = require('xml2js')
 try {
   const label = core.getInput('label');
   console.log(`Label: ${label}`)
