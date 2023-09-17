@@ -4,11 +4,21 @@ const fs = require('fs')
 const xml2js = require('xml2js')
 try {
   const label = core.getInput('label');
+  const filePath = core.getInput('filePath');
+
   console.log(`Label: ${label}`)
+  console.log(`File path: ${filePath}`)
 
   core.setOutput("label", label);
 
-  const version = require('./package.json').version;
+  // if (project == 'dotnetcore')
+  //   filePath = `${filePath}/.csproj`;
+  // else if (project == 'nodejs')
+  //   filePath = `${filePath}/package.json`;
+
+  const version = require(filePath).version;
+
+
   // the version is in semantic format, so we can split it by dot
   const versionParts = version.split('.');
   if (label === 'major') {
