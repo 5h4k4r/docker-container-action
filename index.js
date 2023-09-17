@@ -2,9 +2,11 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const fs = require('fs')
 const xml2js = require('xml2js')
+
 try {
+  console.log(`CWD: ${process.cwd()}`)
   const label = core.getInput('label');
-  const filePath = `../../${core.getInput('filePath')}`;
+  const filePath = `${process.cwd()}/${core.getInput('filePath')}`;
 
   console.log(`Label: ${label}`)
   console.log(`File path: ${filePath}`)
