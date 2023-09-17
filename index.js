@@ -11,10 +11,17 @@ try {
   const version = require('./package.json').version;
   // the version is in semantic format, so we can split it by dot
   const versionParts = version.split('.');
-  if (label === 'major')
+  if (label === 'major') {
     versionParts[0] = parseInt(versionParts[0]) + 1;
-  else if (label == 'minor')
+    versionParts[1] = 0;
+    versionParts[2] = 0;
+
+  }
+  else if (label == 'minor') {
     versionParts[1] = parseInt(versionParts[1]) + 1;
+    versionParts[2] = 0;
+
+  }
   else if (label == 'patch')
     versionParts[2] = parseInt(versionParts[2]) + 1;
 
