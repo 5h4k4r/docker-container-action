@@ -1,9 +1,11 @@
 name: Test Action
 
 on:
-  pull_request:
-    types: [labeled]
-
+  # pull_request:
+  # types: [labeled]
+  push:
+    branches:
+      - main
 jobs:
   hello-world-job:
     runs-on: ubuntu-latest
@@ -29,4 +31,6 @@ jobs:
 
       - name: Get the output time
         run: |
-          echo The label was ${{ steps.hello.outputs.label }}
+          echo The label was label
+
+# ${{ steps.hello.outputs.label }}
