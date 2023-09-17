@@ -22,16 +22,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: PWD
-        run: echo $PWD
-
       - name: Hello world action step
         uses: ./
 
         id: hello
         with:
           label: minor
-          filePath: /package.json
+          filePath: $PWD/package.json
 
       # ${{ github.event.label.name }}
       - name: Get the output time
