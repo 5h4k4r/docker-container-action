@@ -28,7 +28,7 @@ jobs:
         with:
           label: minor
           filePath: package.json
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
 
       # ${{ github.event.label.name }}
       - name: Get the output time
