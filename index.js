@@ -125,6 +125,7 @@ async function commitChanges(filePath) {
         headers: {
           'Accept': 'application/vnd.github+json',
           'Authorization': `Bearer ${githubToken}`,
+          'X-GitHub-Api-Version': '2022-11-28'
         },
       }
     );
