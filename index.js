@@ -7,6 +7,7 @@ run();
 async function run() {
   try {
     console.log(`CWD: ${process.cwd()}`)
+
     const label = core.getInput('label');
     const filePath = `${process.cwd()}/${core.getInput('filePath')}`;
 
@@ -27,6 +28,7 @@ async function run() {
 
     // the version is in semantic format, so we can split it by dot
     const versionParts = version.split('.');
+    // 1.2.3 => [1, 2, 3]
     if (label === 'major') {
       versionParts[0] = parseInt(versionParts[0]) + 1;
       versionParts[1] = 0;
@@ -45,7 +47,7 @@ async function run() {
     console.log(versionParts)
     // increment the patch version
     // join the parts back together
-    const newVersion = `v${versionParts.join('.')}`;
+    const newVersion = versionParts.join('.');
 
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
@@ -69,6 +71,7 @@ async function run() {
 async function commitChanges(filePath) {
   const commitMessage = 'Commit message here';
   const newContent = 'New content to be added';
+  const githubToken = core.getInput('githubToken');
 
 
   // Get the repository owner and name
@@ -93,6 +96,12 @@ async function commitChanges(filePath) {
       {
         content: newContent,
         encoding: 'utf-8',
+      },
+      {
+        headers: {
+          Accept: 'application/vnd.github.v3+json',
+          Authorization: `Bearer ${githubToken}`,
+        },
       }
     );
     console.log('blobResponse: ' + blobResponse.data)

@@ -7,6 +7,9 @@ inputs:
   filePath:
     description: "File path of the project info (e.g: package.json) relative to the root directory of the repository."
     required: true
+  repoToken:
+    description: GitHub repository token
+    required: true
 
 outputs:
   time: # id of output
