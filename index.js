@@ -140,6 +140,12 @@ async function commitChanges(filePath) {
         message: commitMessage,
         tree: newTreeSha,
         parents: [baseTreeSha],
+      },
+      {
+        headers: {
+          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': `Bearer ${githubToken}`,
+        },
       }
     );
 
