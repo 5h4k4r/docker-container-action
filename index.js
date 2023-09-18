@@ -121,6 +121,11 @@ async function commitChanges(filePath) {
             sha: newBlobSha,
           },
         ],
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+        },
       }
     );
 
