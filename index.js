@@ -124,6 +124,7 @@ async function commitChanges(filePath) {
       },
       {
         headers: {
+          'Accept': 'application/vnd.github.v3+json',
           'Authorization': `Bearer ${githubToken}`,
         },
       }
