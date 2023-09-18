@@ -107,7 +107,6 @@ async function commitChanges(filePath) {
     console.log('blobResponse: ' + blobResponse.data)
 
     const newBlobSha = blobResponse.data.sha;
-
     // Create a new tree with the updated blob
     const treeResponse = await axios.post(
       `https://api.github.com/repos/${owner}/${repo}/git/trees`,
@@ -124,7 +123,7 @@ async function commitChanges(filePath) {
       },
       {
         headers: {
-          'Accept': 'application/vnd.github.v3+json',
+          'Accept': 'application/vnd.github+json',
           'Authorization': `Bearer ${githubToken}`,
         },
       }
