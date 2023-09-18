@@ -104,7 +104,7 @@ async function commitChanges(filePath) {
         },
       }
     );
-    console.log('blobResponse: ' + blobResponse.data)
+    console.log('blobResponse success')
 
     const newBlobSha = blobResponse.data.sha;
     // Create a new tree with the updated blob
@@ -129,7 +129,7 @@ async function commitChanges(filePath) {
       }
     );
 
-    console.log('treeResponse: ' + treeResponse.data)
+    console.log('treeResponse success')
     const newTreeSha = treeResponse.data.sha;
 
     // Create a new commit
@@ -148,6 +148,7 @@ async function commitChanges(filePath) {
       }
     );
 
+    console.log('commitResponse success')
     const newCommitSha = commitResponse.data.sha;
 
     // Update the branch reference
