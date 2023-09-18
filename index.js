@@ -156,6 +156,12 @@ async function commitChanges(filePath) {
       `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`,
       {
         sha: newCommitSha,
+      },
+      {
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'Authorization': `Bearer ${githubToken}`,
+        },
       }
     );
 
