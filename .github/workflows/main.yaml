@@ -22,9 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Print GitHub token
-        run: echo ${{ secrets.GITHUB_TOKEN }}
-
       - name: Hello world action step
         uses: ./
         id: hello
