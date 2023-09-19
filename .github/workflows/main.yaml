@@ -27,7 +27,6 @@ jobs:
         id: hello
         with:
           label: minor
-          filePath: package.json
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       # ${{ github.event.label.name }}
