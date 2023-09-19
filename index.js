@@ -50,7 +50,7 @@ async function run() {
 
     // fs.writeFileSync(file, JSON.stringify(file, null, 2));
 
-    await commitChanges(core.getInput('filePath'), JSON.stringify(file, null, 2));
+    await commitChanges(core.getInput('filePath'), file);
 
     const payload = JSON.stringify(github.context.payload, undefined, 2)
 
