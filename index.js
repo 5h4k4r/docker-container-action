@@ -82,7 +82,7 @@ async function commitChanges(filePath, file) {
     );
 
     const baseTreeSha = branchResponse.data.commit.sha;
-    console.log(file)
+    console.log(typeof file, file)
     // Create a new blob with the updated content
     const blobResponse = await axios.post(
       `https://api.github.com/repos/${owner}/${repo}/git/blobs`,
@@ -98,6 +98,7 @@ async function commitChanges(filePath, file) {
       }
     );
 
+    console.log('Blob Created')
     const newBlobSha = blobResponse.data.sha;
     // Create a new tree with the updated blob
     const treeResponse = await axios.post(
@@ -121,6 +122,7 @@ async function commitChanges(filePath, file) {
       }
     );
 
+    console.log('Tree Created')
     const newTreeSha = treeResponse.data.sha;
 
     // Create a new commit
@@ -139,6 +141,7 @@ async function commitChanges(filePath, file) {
       }
     );
 
+    console.log('Commit Created')
     const newCommitSha = commitResponse.data.sha;
 
     // Update the branch reference
@@ -154,6 +157,7 @@ async function commitChanges(filePath, file) {
         },
       }
     );
+    console.log('Branch Updated')
   } catch (error) {
     core.setFailed(error);
 
