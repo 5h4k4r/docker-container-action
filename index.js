@@ -62,7 +62,7 @@ async function run() {
 async function commitChanges(file, filePath) {
   const commitMessage = 'Commit message here';
 
-  let newContent = JSON.stringify(newContent, null, 2);
+  let newContent = JSON.stringify(file, null, 2);
   // Append a newline character to the end of the new content
   newContent += '\n';
 
