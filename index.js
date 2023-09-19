@@ -26,18 +26,18 @@ async function run() {
     const versionParts = version.split('.');
     // 1.2.3 => [1, 2, 3]
     if (labelInput === 'major') {
+
       versionParts[0] = parseInt(versionParts[0]) + 1;
       versionParts[1] = 0;
       versionParts[2] = 0;
 
-    }
-    else if (labelInput == 'minor') {
+    } else if (labelInput == 'minor') {
+
       versionParts[1] = parseInt(versionParts[1]) + 1;
       versionParts[2] = 0;
 
     }
     else if (labelInput == 'patch')
-      // increment the patch version
       versionParts[2] = parseInt(versionParts[2]) + 1;
 
 
