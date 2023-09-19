@@ -8,19 +8,16 @@ async function run() {
   try {
     console.log(`CWD: ${process.cwd()}`)
 
-    const label = core.getInput('label');
-    const filePath = `${process.cwd()}/${core.getInput('filePath')}`;
+    const filePathInput = core.getInput('filePath');
+    const labelInput = core.getInput('label');
+
+    const filePath = getProjectInfoFile(filePathInput);
 
 
-    console.log(`Label: ${label}`)
+    console.log(`Label: ${labelInput}`)
     console.log(`File path: ${filePath}`)
 
-    core.setOutput("label", label);
-
-    // if (project == 'dotnet')
-    //   filePath = `${filePath}/.csproj`;
-    // else if (project == 'nodejs')
-    //   filePath = `${filePath}/package.json`;
+    core.setOutput("label", labelInput);
 
     const packageJson = require(filePath);
     const version = packageJson.version;
@@ -29,23 +26,22 @@ async function run() {
     // the version is in semantic format, so we can split it by dot
     const versionParts = version.split('.');
     // 1.2.3 => [1, 2, 3]
-    if (label === 'major') {
+    if (labelInput === 'major') {
       versionParts[0] = parseInt(versionParts[0]) + 1;
       versionParts[1] = 0;
       versionParts[2] = 0;
 
     }
-    else if (label == 'minor') {
+    else if (labelInput == 'minor') {
       versionParts[1] = parseInt(versionParts[1]) + 1;
       versionParts[2] = 0;
 
     }
-    else if (label == 'patch')
+    else if (labelInput == 'patch')
+      // increment the patch version
       versionParts[2] = parseInt(versionParts[2]) + 1;
 
 
-    console.log(versionParts)
-    // increment the patch version
     // join the parts back together
     const newVersion = versionParts.join('.');
 
@@ -129,7 +125,6 @@ async function commitChanges(filePath) {
       }
     );
 
-    console.log('treeResponse success')
     const newTreeSha = treeResponse.data.sha;
 
     // Create a new commit
@@ -148,7 +143,6 @@ async function commitChanges(filePath) {
       }
     );
 
-    console.log('commitResponse success')
     const newCommitSha = commitResponse.data.sha;
 
     // Update the branch reference
@@ -164,10 +158,20 @@ async function commitChanges(filePath) {
         },
       }
     );
-
-    console.log('Changes committed successfully!');
   } catch (error) {
-    console.error('Error committing changes:', error);
+    core.setFailed(error.message);
+
   }
 }
 
+function getProjectInfoFile(filePathInput) {
+  if (filePathInput == null || filePathInput == undefined || filePathInput == '') {
+    // List files inside the root directory of the repository
+    const files = fs.readdirSync(process.cwd());
+    // Return the first file that matches .csproj or package.json
+    const projectInfoFile = files.find(file => file.match(/\.csproj|package\.json/));
+    return `${process.cwd()}/${projectInfoFile}`;
+  }
+  else
+    return `${process.cwd()}/${filePathInput}`;
+}
