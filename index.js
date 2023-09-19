@@ -11,7 +11,8 @@ async function run() {
     const filePathInput = core.getInput('filePath');
     const labelInput = core.getInput('label');
 
-    const file = getProjectInfoFile(filePathInput);
+    const filePath = getProjectInfoFilePath(filePathInput);
+    const file = require(filePath);
 
 
     console.log(`Label: ${labelInput}`)
@@ -19,7 +20,7 @@ async function run() {
 
     core.setOutput("label", labelInput);
 
-    const version = getProjectVersion(file);
+    const version = getProjectVersion(filePath);
 
     // the version is in semantic format, so we can split it by dot
     const versionParts = version.split('.');
@@ -43,7 +44,7 @@ async function run() {
     // join the parts back together
     const newVersion = versionParts.join('.');
 
-    updateProjectVersion(file, newVersion);
+    updateProjectVersion(filePath, newVersion);
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
 
@@ -159,18 +160,17 @@ async function commitChanges(filePath, file) {
   }
 }
 
-function getProjectInfoFile(filePath) {
+function getProjectInfoFilePath(filePath) {
   if (filePath == null || filePath == undefined || filePath == '') {
     // List files inside the root directory of the repository
     const files = fs.readdirSync(process.cwd());
     // Return the first file that matches .csproj or package.json
     const projectInfoFile = files.find(file => file.match(/\.csproj|package\.json/));
-    return require(`${process.cwd()}/${projectInfoFile}`);
+    return `${process.cwd()}/${projectInfoFile}`;
   }
   else
-    return require(`${process.cwd()}/${filePath}`);
+    return `${process.cwd()}/${filePath}`;
 }
-
 function getProjectVersion(filePath) {
   const projectInfoFile = require(filePath);
 
