@@ -160,6 +160,7 @@ async function commitChanges(file, filePath) {
     );
     console.log('Branch Updated')
   } catch (error) {
+    console.log(error)
     core.setFailed(error);
 
   }
