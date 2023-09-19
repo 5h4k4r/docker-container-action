@@ -49,8 +49,8 @@ async function run() {
     console.log(`Old version: ${version}. New version: ${newVersion}`)
 
     // fs.writeFileSync(file, JSON.stringify(file, null, 2));
-
-    await commitChanges(core.getInput('filePath'), file);
+    const filePathRelatedToRoot = getProjectInfoFilePath(filePathInput, true);
+    await commitChanges(file, filePathRelatedToRoot);
 
     const payload = JSON.stringify(github.context.payload, undefined, 2)
 
@@ -62,7 +62,7 @@ async function run() {
 
 
 // Region functions
-async function commitChanges(filePath, file) {
+async function commitChanges(file, filePath) {
   const commitMessage = 'Commit message here';
   const newContent = file;
   const githubToken = core.getInput('githubToken');
@@ -165,16 +165,16 @@ async function commitChanges(filePath, file) {
   }
 }
 
-function getProjectInfoFilePath(filePath) {
+function getProjectInfoFilePath(filePath, relativeToRoot = false) {
   if (filePath == null || filePath == undefined || filePath == '') {
     // List files inside the root directory of the repository
     const files = fs.readdirSync(process.cwd());
     // Return the first file that matches .csproj or package.json
     const projectInfoFile = files.find(file => file.match(/\.csproj|package\.json/));
-    return `${process.cwd()}/${projectInfoFile}`;
+    return relativeToRoot ? projectInfoFile : `${process.cwd()}/${projectInfoFile}`;
   }
   else
-    return `${process.cwd()}/${filePath}`;
+    return relativeToRoot ? filePath : `${process.cwd()}/${filePath}`;
 }
 function getProjectVersion(filePath) {
   const projectInfoFile = require(filePath);
