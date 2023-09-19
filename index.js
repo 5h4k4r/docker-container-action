@@ -48,11 +48,10 @@ async function run() {
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
 
-    // fs.writeFileSync(file, JSON.stringify(file, null, 2));
     const filePathRelatedToRoot = getProjectInfoFilePath(filePathInput, true);
     await commitChanges(file, filePathRelatedToRoot);
 
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
+    const payload = JSON.stringify(github.context.payload + '\n', undefined, 2)
 
     // console.log(`The event payload: ${payload}`);
   } catch (error) {
