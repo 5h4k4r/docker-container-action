@@ -48,7 +48,7 @@ async function run() {
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
 
-    fs.writeFileSync(file, JSON.stringify(file, null, 2));
+    fs.writeFileSync(file, JSON.stringify(filePath, null, 2));
 
     await commitChanges(core.getInput('filePath'), file);
 
