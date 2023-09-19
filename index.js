@@ -61,9 +61,12 @@ async function run() {
 // Region functions
 async function commitChanges(file, filePath) {
   const commitMessage = 'Commit message here';
-  const newContent = file;
-  const githubToken = core.getInput('githubToken');
 
+  let newContent = JSON.stringify(newContent, null, 2);
+  // Append a newline character to the end of the new content
+  newContent += '\n';
+
+  const githubToken = core.getInput('githubToken');
 
   // Get the repository owner and name
   const repoFullName = process.env.GITHUB_REPOSITORY;
@@ -84,7 +87,7 @@ async function commitChanges(file, filePath) {
     const blobResponse = await axios.post(
       `https://api.github.com/repos/${owner}/${repo}/git/blobs`,
       {
-        content: JSON.stringify(newContent, null, 2),
+        content: newContent,
         encoding: 'utf-8',
       },
       {
