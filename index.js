@@ -99,6 +99,7 @@ async function commitChanges(filePath, file) {
     );
 
     console.log('Blob Created')
+    console.log('File path: ', filePath)
     const newBlobSha = blobResponse.data.sha;
     // Create a new tree with the updated blob
     const treeResponse = await axios.post(
