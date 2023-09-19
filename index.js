@@ -51,8 +51,6 @@ async function run() {
     const filePathRelatedToRoot = getProjectInfoFilePath(filePathInput, true);
     await commitChanges(file, filePathRelatedToRoot);
 
-    const payload = JSON.stringify(github.context.payload + '\n', undefined, 2)
-
     // console.log(`The event payload: ${payload}`);
   } catch (error) {
     core.setFailed(error.message);
