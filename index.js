@@ -11,17 +11,15 @@ async function run() {
     const filePathInput = core.getInput('filePath');
     const labelInput = core.getInput('label');
 
-    const filePath = getProjectInfoFile(filePathInput);
+    const file = getProjectInfoFile(filePathInput);
 
 
     console.log(`Label: ${labelInput}`)
-    console.log(`File path: ${filePath}`)
+    console.log(`File path: ${file}`)
 
     core.setOutput("label", labelInput);
 
-    const packageJson = require(filePath);
-    const version = packageJson.version;
-
+    const version = getProjectVersion(file);
 
     // the version is in semantic format, so we can split it by dot
     const versionParts = version.split('.');
@@ -45,14 +43,13 @@ async function run() {
     // join the parts back together
     const newVersion = versionParts.join('.');
 
+    updateProjectVersion(file, newVersion);
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
 
-    packageJson.version = newVersion;
+    fs.writeFileSync(file, JSON.stringify(projectInfoFile, null, 2));
 
-    fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
-
-    await commitChanges(core.getInput('filePath'));
+    await commitChanges(core.getInput('filePath'), file);
 
     const payload = JSON.stringify(github.context.payload, undefined, 2)
 
@@ -64,9 +61,9 @@ async function run() {
 
 
 // Region functions
-async function commitChanges(filePath) {
+async function commitChanges(filePath, file) {
   const commitMessage = 'Commit message here';
-  const newContent = 'New content to be added';
+  const newContent = file;
   const githubToken = core.getInput('githubToken');
 
 
@@ -83,7 +80,6 @@ async function commitChanges(filePath) {
       `https://api.github.com/repos/${owner}/${repo}/branches/${branch}`
     );
 
-    console.log('branchResponse: ' + branchResponse.data)
     const baseTreeSha = branchResponse.data.commit.sha;
 
     // Create a new blob with the updated content
@@ -100,7 +96,6 @@ async function commitChanges(filePath) {
         },
       }
     );
-    console.log('blobResponse success')
 
     const newBlobSha = blobResponse.data.sha;
     // Create a new tree with the updated blob
@@ -164,14 +159,32 @@ async function commitChanges(filePath) {
   }
 }
 
-function getProjectInfoFile(filePathInput) {
-  if (filePathInput == null || filePathInput == undefined || filePathInput == '') {
+function getProjectInfoFile(filePath) {
+  if (filePath == null || filePath == undefined || filePath == '') {
     // List files inside the root directory of the repository
     const files = fs.readdirSync(process.cwd());
     // Return the first file that matches .csproj or package.json
     const projectInfoFile = files.find(file => file.match(/\.csproj|package\.json/));
-    return `${process.cwd()}/${projectInfoFile}`;
+    return require(`${process.cwd()}/${projectInfoFile}`);
   }
   else
-    return `${process.cwd()}/${filePathInput}`;
+    return require(`${process.cwd()}/${filePath}`);
+}
+
+function getProjectVersion(file) {
+
+  // Update the version if the file is .csproj
+  if (file.match(/\.csproj/))
+    return file.Project.PropertyGroup[0].Version;
+  else if (file.match(/package\.json/))
+    return file.version;
+
+}
+function updateProjectVersion(file, newVersion) {
+
+  // Update the version if the file is .csproj
+  if (file.match(/\.csproj/))
+    file.Project.PropertyGroup[0].Version = newVersion;
+  else if (file.match(/package\.json/))
+    file.version = newVersion;
 }
