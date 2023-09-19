@@ -171,20 +171,23 @@ function getProjectInfoFile(filePath) {
     return require(`${process.cwd()}/${filePath}`);
 }
 
-function getProjectVersion(file) {
+function getProjectVersion(filePath) {
+  const projectInfoFile = require(filePath);
 
   // Update the version if the file is .csproj
-  if (file.match(/\.csproj/))
-    return file.Project.PropertyGroup[0].Version;
-  else if (file.match(/package\.json/))
-    return file.version;
+  if (filePath.match(/\.csproj/))
+    return projectInfoFile.Project.PropertyGroup[0].Version;
+  else if (filePath.match(/package\.json/))
+    return projectInfoFile.version;
 
 }
-function updateProjectVersion(file, newVersion) {
+function updateProjectVersion(filePath, newVersion) {
+
+  const projectInfoFile = require(filePath);
 
   // Update the version if the file is .csproj
-  if (file.match(/\.csproj/))
-    file.Project.PropertyGroup[0].Version = newVersion;
-  else if (file.match(/package\.json/))
-    file.version = newVersion;
+  if (filePath.match(/\.csproj/))
+    projectInfoFile.Project.PropertyGroup[0].Version = newVersion;
+  else if (filePath.match(/package\.json/))
+    projectInfoFile.version = newVersion;
 }
