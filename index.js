@@ -48,9 +48,9 @@ async function run() {
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
 
-    fs.writeFileSync(file, JSON.stringify(filePath, null, 2));
+    fs.writeFileSync(file, JSON.stringify(file, null, 2));
 
-    await commitChanges(core.getInput('filePath'), file);
+    await commitChanges(core.getInput('filePath'), JSON.stringify(file, null, 2));
 
     const payload = JSON.stringify(github.context.payload, undefined, 2)
 
