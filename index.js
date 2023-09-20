@@ -47,6 +47,7 @@ async function run() {
     updateProjectVersion(filePath, newVersion);
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
+    console.log(`Old version: ${version}. New version: ${newVersion}`)
 
     const filePathRelatedToRoot = getProjectInfoFilePath(filePathInput, true);
     await commitChanges(file, filePathRelatedToRoot);
