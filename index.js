@@ -82,8 +82,8 @@ async function commitChanges(file, filePath) {
     );
 
     const baseTreeSha = branchResponse.data.commit.sha;
-    console.log(typeof file, file)
     // Create a new blob with the updated content
+    console.log('Branch')
     const blobResponse = await axios.post(
       `https://api.github.com/repos/${owner}/${repo}/git/blobs`,
       {
