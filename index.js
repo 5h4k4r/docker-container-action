@@ -47,6 +47,7 @@ async function run() {
     updateProjectVersion(filePath, newVersion);
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
+    console.log(`Old version: ${version}. New version: ${newVersion}`)
 
     const filePathRelatedToRoot = getProjectInfoFilePath(filePathInput, true);
     await commitChanges(file, filePathRelatedToRoot);
@@ -82,8 +83,8 @@ async function commitChanges(file, filePath) {
     );
 
     const baseTreeSha = branchResponse.data.commit.sha;
-    console.log(typeof file, file)
     // Create a new blob with the updated content
+    console.log('Branch')
     const blobResponse = await axios.post(
       `https://api.github.com/repos/${owner}/${repo}/git/blobs`,
       {
@@ -160,6 +161,7 @@ async function commitChanges(file, filePath) {
     );
     console.log('Branch Updated')
   } catch (error) {
+    console.log(error)
     core.setFailed(error);
 
   }
