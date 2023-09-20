@@ -7,6 +7,7 @@ run();
 async function run() {
   try {
     console.log(`CWD: ${process.cwd()}`)
+    console.log(`CWD: ${process.cwd()}`)
 
     const filePathInput = core.getInput('filePath');
     const labelInput = core.getInput('label');
