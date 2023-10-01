@@ -2,6 +2,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const fs = require('fs')
 const axios = require('axios');
+import convert from 'xml-js';
 
 run();
 async function run() {
@@ -182,10 +183,13 @@ function getProjectInfoFilePath(filePath, relativeToRoot = false) {
 function getProjectVersion(filePath) {
   const projectInfoFile = require(filePath);
 
-  // Update the version if the file is .csproj
-  if (filePath.match(/\.csproj/))
-    return projectInfoFile.Project.PropertyGroup[0].Version;
-  else if (filePath.match(/package\.json/))
+  if (filePath.match(/\.csproj/)) {
+
+    const convertedToJson = convert.xml2js(projectInfoFile);
+    // elements[0] -> PropertyGroup -> Version (object) -> text (e.g. 1.2.3)
+    return convertedToJson.elements[0].elements.find(el => el.name == 'PropertyGroup').elements.find(el => el.name == 'Version').elements.find(el => el.type == 'text').text;
+
+  } else if (filePath.match(/package\.json/))
     return projectInfoFile.version;
 
 }
