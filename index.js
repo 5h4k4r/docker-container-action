@@ -14,7 +14,7 @@ async function run() {
     const labelInput = core.getInput('label');
 
     const filePath = getProjectInfoFilePath(filePathInput);
-    const file = require(filePath);
+    const file = await getFile(filePath);
 
 
     console.log(`Label: ${labelInput}`)
@@ -202,4 +202,9 @@ function updateProjectVersion(filePath, newVersion) {
     projectInfoFile.Project.PropertyGroup[0].Version = newVersion;
   else if (filePath.match(/package\.json/))
     projectInfoFile.version = newVersion;
+}
+
+function getFile(filePath) {
+  const file = fs.readFileSync(filePath, 'utf8');
+  return file;
 }
