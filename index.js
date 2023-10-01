@@ -17,7 +17,7 @@ async function run() {
 
 
     console.log(`Label: ${labelInput}`)
-    console.log(`File path: ${file}`)
+    console.log(`File path: ${filePath}`)
 
     core.setOutput("label", labelInput);
 
