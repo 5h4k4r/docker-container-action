@@ -77,7 +77,11 @@ async function commitChanges(file, filePath) {
 
   // Get the current branch
   const branch = process.env.GITHUB_REF.replace('refs/heads/', '');
-
+  console.log(`https://api.github.com/repos/${owner}/${repo}/branches/${branch}`,
+    `https://api.github.com/repos/${owner}/${repo}/git/blobs`,
+    `https://api.github.com/repos/${owner}/${repo}/git/trees`,
+    `https://api.github.com/repos/${owner}/${repo}/git/commits`,
+    `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`)
   try {
     // Get the current commit SHA for the branch
     const branchResponse = await axios.get(
