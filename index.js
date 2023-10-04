@@ -1,5 +1,6 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
+const glob = require('@actions/glob')
 const fs = require('fs')
 const axios = require('axios');
 import convert from 'xml-js';
@@ -9,6 +10,11 @@ async function run() {
   try {
     console.log(`CWD: ${process.cwd()}`)
     console.log(`filePath: ${core.getInput('filePath')}`)
+
+    const patterns = ['**/*.csproj', '**/package.json']
+    const globber = await glob.create(patterns.join('\n'))
+    const files = await globber.glob()
+    console.log(files)
 
     const filePathInput = core.getInput('filePath');
     const labelInput = core.getInput('label');
@@ -48,7 +54,6 @@ async function run() {
 
     updateProjectVersion(filePath, newVersion);
 
-    console.log(`Old version: ${version}. New version: ${newVersion}`)
     console.log(`Old version: ${version}. New version: ${newVersion}`)
 
     const filePathRelatedToRoot = getProjectInfoFilePath(filePathInput, true);
