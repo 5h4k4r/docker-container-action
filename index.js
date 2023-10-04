@@ -53,7 +53,7 @@ async function run() {
     // join the parts back together
     const newVersion = versionParts.join('.');
 
-    updateProjectVersion(filePath, newVersion);
+    file = updateProjectVersion(filePath, newVersion);
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
 
@@ -100,7 +100,7 @@ async function commitChanges(file, filePath) {
     const blobResponse = await axios.post(
       `https://api.github.com/repos/${owner}/${repo}/git/blobs`,
       {
-        content: file,
+        content: newContent,
         encoding: 'utf-8',
       },
       {
@@ -205,13 +205,17 @@ function getProjectVersion(filePath) {
 }
 function updateProjectVersion(filePath, newVersion) {
 
-  const projectInfoFile = require(filePath);
+  const projectInfoFile = getFile(filePath);
 
   // Update the version if the file is .csproj
   if (filePath.match(/\.csproj/))
     projectInfoFile.Project.PropertyGroup[0].Version = newVersion;
-  else if (filePath.match(/package\.json/))
+  else if (filePath.match(/package\.json/)) {
+    projectInfoFile = JSON.parse(projectInfoFile)
     projectInfoFile.version = newVersion;
+  }
+
+  return projectInfoFile;
 }
 
 function getFile(filePath) {
