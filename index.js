@@ -204,7 +204,7 @@ function getProjectVersion(filePath) {
 }
 function updateProjectVersion(filePath, newVersion) {
 
-  const projectInfoFile = getFile(filePath);
+  let projectInfoFile = getFile(filePath);
 
   // Update the version if the file is .csproj
   if (filePath.match(/\.csproj/))
