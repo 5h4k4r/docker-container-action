@@ -14,6 +14,7 @@ async function run() {
     const patterns = ['src/**/*.csproj', 'package.json']
     const globber = await glob.create(patterns.join('\n'))
     const files = await globber.glob()
+
     console.log("files: ", files)
 
     const filePathInput = core.getInput('filePath');
