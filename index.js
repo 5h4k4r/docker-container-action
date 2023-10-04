@@ -99,7 +99,7 @@ async function commitChanges(file, filePath) {
     const blobResponse = await axios.post(
       `https://api.github.com/repos/${owner}/${repo}/git/blobs`,
       {
-        content: newContent,
+        content: file,
         encoding: 'utf-8',
       },
       {
