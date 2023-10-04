@@ -21,7 +21,6 @@ async function run() {
     const labelInput = core.getInput('label');
 
     const filePath = getProjectInfoFilePath(filePathInput);
-    const file = await getFile(filePath);
 
 
     console.log(`Label: ${labelInput}`)
@@ -53,7 +52,7 @@ async function run() {
     // join the parts back together
     const newVersion = versionParts.join('.');
 
-    file = updateProjectVersion(filePath, newVersion);
+    const file = updateProjectVersion(filePath, newVersion);
 
     console.log(`Old version: ${version}. New version: ${newVersion}`)
 
