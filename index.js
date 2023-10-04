@@ -3,7 +3,7 @@ const github = require('@actions/github')
 const glob = require('@actions/glob')
 const fs = require('fs')
 const axios = require('axios');
-import convert from 'xml-js';
+const convert = require('xml-js');
 
 run();
 async function run() {
