@@ -4,7 +4,7 @@ const glob = require('@actions/glob')
 const fs = require('fs')
 const axios = require('axios');
 const convert = require('xml-js');
-const Oktokit = require('@octokit/rest')
+const { Octokit } = require("@octokit/action");
 run();
 async function run() {
 
@@ -83,7 +83,7 @@ async function commitChanges(file, filePath) {
 
   // Get the current branch
   const branch = process.env.GITHUB_REF.replace('refs/heads/', '');
-  const oktokit = new Oktokit({
+  const oktokit = new Octokit({
     auth: githubToken
   })
 
