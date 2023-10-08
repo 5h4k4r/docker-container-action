@@ -12,10 +12,6 @@ async function run() {
     console.log(`CWD: ${process.cwd()}`)
     console.log(`filePath: ${core.getInput('filePath')}`)
 
-    const githubToken = core.getInput('githubToken');
-
-    console.log("githubToken", githubToken)
-
     const patterns = ['src/**/*.csproj', 'package.json']
     const globber = await glob.create(patterns.join('\n'))
     const files = await globber.glob()
@@ -79,7 +75,7 @@ async function commitChanges(file, filePath) {
   // Append a newline character to the end of the new content
   newContent += '\n';
 
-  const githubToken = process.env.GITHUB_TOKEN;
+  const githubToken = core.getInput('githubToken');
 
   // Get the repository owner and name
   const repoFullName = process.env.GITHUB_REPOSITORY;
