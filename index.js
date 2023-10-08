@@ -12,7 +12,7 @@ async function run() {
     console.log(`CWD: ${process.cwd()}`)
     console.log(`filePath: ${core.getInput('filePath')}`)
 
-    const githubToken = core.getInput('filePath');
+    const githubToken = core.getInput('githubToken');
 
     console.log("githubToken", githubToken)
 
