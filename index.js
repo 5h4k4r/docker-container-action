@@ -75,7 +75,7 @@ async function commitChanges(file, filePath) {
   // Append a newline character to the end of the new content
   newContent += '\n';
 
-  const githubToken = core.getInput('githubToken');
+  const githubToken = process.env.GITHUB_TOKEN;
 
   // Get the repository owner and name
   const repoFullName = process.env.GITHUB_REPOSITORY;
