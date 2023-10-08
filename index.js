@@ -12,6 +12,10 @@ async function run() {
     console.log(`CWD: ${process.cwd()}`)
     console.log(`filePath: ${core.getInput('filePath')}`)
 
+    const githubToken = process.env.GITHUB_TOKEN;
+
+    console.log("githubToken", githubToken)
+
     const patterns = ['src/**/*.csproj', 'package.json']
     const globber = await glob.create(patterns.join('\n'))
     const files = await globber.glob()
