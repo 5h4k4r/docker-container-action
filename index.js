@@ -4,7 +4,7 @@ const glob = require('@actions/glob')
 const fs = require('fs')
 const axios = require('axios');
 const convert = require('xml-js');
-const { Octokit } = require("@octokit/action");
+const { Octokit } = require("@octokit/rest");
 run();
 async function run() {
 
