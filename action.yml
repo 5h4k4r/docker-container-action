@@ -1,5 +1,5 @@
-name: "Hello World"
-description: "Greet someone and record the time"
+name: "Project Version Check"
+description: "Checks if the project version matches the Git tag"
 inputs:
   branch:
     description: "Branch name"
