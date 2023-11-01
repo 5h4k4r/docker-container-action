@@ -1,7 +1,3 @@
-Certainly! Here's the README file for your **Project Version Check** GitHub Action:
-
----
-
 # Project Version Check GitHub Action
 
 The **Project Version Check** GitHub Action is a custom action designed to help you manage and maintain your project's version when following semantic versioning for releases. Whether your project is based on Node.js or .NET, this action automates the process of checking the project version against a Git tag and updating it when necessary.
