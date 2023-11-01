@@ -1,20 +1,123 @@
-name: "Hello World"
-description: "Greet someone and record the time"
+name: "Project Version Check"
+description: "Checks if the project version matches the Git tag"
 inputs:
-  label:
-    description: "Optional label"
+  branch:
+    description: "Branch name"
     required: false
-  filePath:
-    description: "File path of the project info (e.g: package.json) relative to the root directory of the repository."
-    required: false
-  githubToken:
-    description: GitHub repository token
-    required: true
-
-outputs:
-  time: # id of output
-    description: "The time we greeted you"
+    default: main
 
 runs:
-  using: "node20"
-  main: "dist/index.js"
+  using: "composite"
+  steps:
+    - name: Determine project type
+      shell: bash
+      id: detect_project
+      run: |
+        if $(find * -name 'package.json' | grep -q '.'); then
+          echo "nodejs"
+          echo "PROJECT_TYPE=nodejs" >> $GITHUB_OUTPUT
+
+        elif find * -name '*.csproj' | grep -q '.'; then
+          echo "dotnet"
+          echo "PROJECT_TYPE=dotnet" >> $GITHUB_OUTPUT
+
+        fi
+
+    - name: Get Tag
+      shell: bash
+      id: get-tag
+      run: |
+        RELEASE_VERSION=${GITHUB_REF#refs/*/}
+        echo "RELEASE_VERSION=${RELEASE_VERSION#v}" >> $GITHUB_OUTPUT
+
+    - name: Get Branch Name
+      shell: bash
+      id: get-branch
+      run: |
+        BRANCH_NAME=${{ inputs.branch }}
+        git fetch
+        git checkout $BRANCH_NAME
+        git pull
+        echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+    - if: ${{ steps.detect_project.outputs.PROJECT_TYPE == 'nodejs' }}
+      shell: bash
+      name: Get App version (nodejs)
+      id: get_nodejs_version
+      run: |
+        echo "PROJECT_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+    - if: ${{ steps.detect_project.outputs.PROJECT_TYPE == 'dotnet' }}
+      shell: bash
+      name: Get App version (dotnet)
+      id: get_dotnet_version
+      run: |
+        echo "PROJECT_VERSION=$(find . -name '*.csproj' ! -path "*tests*" -exec grep -oP '<Version>\K[^<]+' {} \; -quit)" >> $GITHUB_ENV
+
+    - name: Compare App version
+      shell: bash
+      run: |
+        if [ "$PROJECT_VERSION" == "$RELEASE_VERSION" ]; then
+          echo "App version matches Git tag: $PROJECT_VERSION"
+        else
+          echo "App version ($PROJECT_VERSION) does not match Git tag ($RELEASE_VERSION)"
+        fi
+
+    - name: Update version
+      shell: bash
+      run: |
+        if [ "$PROJECT_TYPE" == "nodejs" ]; then
+          echo "Updating version in package.json"
+          jq --arg version "$RELEASE_VERSION" '.version = $version' package.json > package.json.tmp
+          mv package.json.tmp package.json
+          echo "FILE_TO_COMMIT=$(find * -name 'package.json')" >> $GITHUB_ENV
+        elif [ "$PROJECT_TYPE" == "dotnet" ]; then
+
+          echo "Updating version in *.csproj"
+          find . -name '*.csproj' ! -path "*tests*" -exec sed -i "s/<Version>[^<]*<\/Version>/<Version>$RELEASE_VERSION<\/Version>/g" {} \;
+          echo "FILE_TO_COMMIT=$(find . -name '*.csproj' ! -path "*tests*")" >> $GITHUB_ENV
+        fi
+      env:
+        PROJECT_TYPE: ${{ steps.detect_project.outputs.PROJECT_TYPE }}
+        RELEASE_VERSION: ${{ steps.get-tag.outputs.RELEASE_VERSION }}
+
+    - name: Commit changes
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        FILE_TO_COMMIT: ${{ env.FILE_TO_COMMIT }}
+        DESTINATION_BRANCH: ${{ steps.get-branch.outputs.BRANCH_NAME }}
+      run: |
+        REPO_PATH=${{ github.repository }}
+        REPO_NAME=${REPO_PATH#*/}
+
+        FILE_TO_COMMIT="${FILE_TO_COMMIT#./}"
+        echo "File path: $FILE_TO_COMMIT"
+        git fetch
+        git pull
+        export MESSAGE="chore: update version to $RELEASE_VERSION"
+        export SHA=$( git rev-parse $DESTINATION_BRANCH:$FILE_TO_COMMIT )
+        export CONTENT=$( base64 -i $FILE_TO_COMMIT )
+        gh api --method PUT /repos/$REPO_PATH/contents/$FILE_TO_COMMIT \
+          --field message="$MESSAGE" \
+          --field content="$CONTENT" \
+          --field encoding="base64" \
+          --field branch="$DESTINATION_BRANCH" \
+          --field sha="$SHA"
+
+        echo "COMMIT_SHA=$SHA" >> $GITHUB_ENV
+
+    - name: Update tag
+      shell: bash
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+
+        git reset --hard
+        git fetch
+        git pull
+        git tag -f v$RELEASE_VERSION $(git rev-parse main)
+        git push --force origin ${{ inputs.branch }} --tags
+      env:
+        RELEASE_VERSION: ${{ steps.get-tag.outputs.RELEASE_VERSION }}
+        COMMIT_SHA: ${{ env.COMMIT_SHA }}
