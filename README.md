@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Project Version Check
-        uses: ditkrg/project-version-check@v1
+        uses: 5h4k4r/project-version-check@v1
         with:
           branch: main # Optional, specify the target branch for creating releases
 
